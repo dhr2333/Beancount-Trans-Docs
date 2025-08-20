@@ -1,19 +1,44 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+Project/Beancount-Trans:
+  label: Project/Beancount-Trans
+  permalink: /beancount-trans
+  description: Beancount-Trans tag description
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+Project/Beancount-Trans-Backend:
+  label: Project/Beancount-Trans-Backend
+  permalink: /beancount-trans-backend
+  description: Beancount-Trans-Backend tag description
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+Project/Beancount-Trans-Fronend:
+  label: Project/Beancount-Trans-Fronend
+  permalink: /beancount-trans-fronend
+  description: Beancount-Trans-Fronend tag description
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+Project/Beancount-Transs-Assets:
+  label: Project/Beancount-Transs-Assets
+  permalink: /beancount-transs-assets
+  description: Beancount-Transs-Assets tag description
+
+Project/Beancount-Trans-Docs:
+  label: Project/Beancount-Trans-Docs
+  permalink: /beancount-trans-docs
+  description: Beancount-Trans-Docs tag description
+
+# facebook:
+#   label: Facebook
+#   permalink: /facebook
+#   description: Facebook tag description
+
+# hello:
+#   label: Hello
+#   permalink: /hello
+#   description: Hello tag description
+
+# docusaurus:
+#   label: Docusaurus
+#   permalink: /docusaurus
+#   description: Docusaurus tag description
+
+# hola:
+#   label: Hola
+#   permalink: /hola
+#   description: Hola tag description

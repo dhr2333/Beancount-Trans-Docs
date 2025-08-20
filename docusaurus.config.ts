@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My Site',
+  title: 'Beancount-Trans',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://trans.dhr2333.cn/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -32,8 +32,18 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'zh-CN', // 将默认语言改为中文
+    locales: ['zh-CN', 'en'], // 支持中文和英文
+    localeConfigs: {
+      'zh-CN': {
+        label: '简体中文',
+        direction: 'ltr',
+      },
+      'en': {
+        label: 'English',
+        direction: 'ltr',
+      },
+    },
   },
 
   presets: [
@@ -44,23 +54,27 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: ({locale, versionDocsDirPath, docPath}) => {
+            return `https://github.com/dhr2333/Beancount-Trans/tree/main/Beancount-Trans-Docs/${versionDocsDirPath}/${docPath}?language=${locale}`;
+          },
         },
         blog: {
           showReadingTime: true,
+          postsPerPage: "ALL",
+          blogSidebarCount: 'ALL',
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: ({locale, blogPath}) => {
+            return `https://github.com/dhr2333/Beancount-Trans/tree/main/Beancount-Trans-Docs/blog/${blogPath}?language=${locale}`;
+          },
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+          onUntruncatedBlogPosts: 'ignore',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -73,7 +87,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Beancount-Trans',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -83,11 +97,15 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: '教程',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: '博客', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          type: 'localeDropdown', // 添加语言切换下拉菜单
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/dhr2333/Beancount-Trans',
           label: 'GitHub',
           position: 'right',
         },
@@ -97,16 +115,16 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: '文档',
           items: [
             {
-              label: 'Tutorial',
+              label: '教程',
               to: '/docs/intro',
             },
           ],
         },
         {
-          title: 'Community',
+          title: '社区',
           items: [
             {
               label: 'Stack Overflow',
@@ -123,25 +141,28 @@ const config: Config = {
           ],
         },
         {
-          title: 'More',
+          title: '更多',
           items: [
             {
-              label: 'Blog',
+              label: '博客',
               to: '/blog',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/dhr2333/Beancount-Trans',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Beancount-Trans. 使用 Docusaurus 构建。`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    metadata: [
+      {name: 'keywords', content: 'beancount, 复式记账, 中文文档, 财务工具'}
+    ],
   } satisfies Preset.ThemeConfig,
 };
 

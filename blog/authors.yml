@@ -1,3 +1,14 @@
+dhr2333:
+  name: Haorui Dai
+  title: Wenzhou Tingyun Technology Co., Ltd.
+  url: https://www.dhr2333.cn/
+  image_url: https://github.com/dhr2333.png
+  page: true
+  socials:
+    # x: haorui_dai
+    github: dhr2333
+    newsletter: https://www.dhr2333.cn/
+
 yangshun:
   name: Yangshun Tay
   title: Ex-Meta Staff Engineer, Co-founder GreatFrontEnd
