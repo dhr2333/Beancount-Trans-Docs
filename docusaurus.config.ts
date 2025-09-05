@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Beancount-Trans',
   tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/beancount-trans-logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -18,12 +18,13 @@ const config: Config = {
   url: 'https://trans.dhr2333.cn/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/docs/',
+  // baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'dhr2333', // Usually your GitHub org/user name.
+  projectName: 'Beancount-Trans', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -33,16 +34,17 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'zh-CN', // 将默认语言改为中文
-    locales: ['zh-CN', 'en'], // 支持中文和英文
+    locales: ['zh-CN'], // 支持中文和英文
+    // locales: ['zh-CN', 'en'], // 支持中文和英文
     localeConfigs: {
       'zh-CN': {
         label: '简体中文',
         direction: 'ltr',
       },
-      'en': {
-        label: 'English',
-        direction: 'ltr',
-      },
+      // 'en': {
+      //   label: 'English',
+      //   direction: 'ltr',
+      // },
     },
   },
 
@@ -52,6 +54,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          routeBasePath: '/',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
@@ -60,8 +63,8 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          postsPerPage: "ALL",
-          blogSidebarCount: 'ALL',
+          postsPerPage: 20,
+          blogSidebarCount: 20,
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
@@ -89,8 +92,8 @@ const config: Config = {
     navbar: {
       title: 'Beancount-Trans',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Beancount-Trans Logo',
+        src: 'img/beancount-trans-logo.svg',
       },
       items: [
         {
@@ -119,7 +122,7 @@ const config: Config = {
           items: [
             {
               label: '教程',
-              to: '/docs/intro',
+              to: '/docs/beancount-trans-快速入门',
             },
           ],
         },
@@ -154,7 +157,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Beancount-Trans. 使用 Docusaurus 构建。`,
+      copyright: `Copyright © ${new Date().getFullYear()} Beancount-Trans`,
     },
     prism: {
       theme: prismThemes.github,
