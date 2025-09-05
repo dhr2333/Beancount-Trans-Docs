@@ -1,7 +1,7 @@
 ---
 tags: []
 title: FAQs
-slug: my-great-post
+slug: FAQs
 type: Document
 date: 2025-08-21
 created_time: 2025-08-21 13:14:36
@@ -19,4 +19,3 @@ published:
 published_time: 2025-08-21
 ---
 # FAQs
-
