@@ -1,8 +1,11 @@
 pipeline {
     agent any
+    triggers {
+        pollSCM('')
+    }
     parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: '要构建的Git分支')
-        string(name: 'VERSION', defaultValue: '', description: '镜像版本标签 (留空则使用分支名+构建号)')
+        string(name: 'VERSION', defaultValue: '', description: '镜像版本标签 (留空则使用Git Commit短哈希)')
         booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: '跳过测试步骤')
         booleanParam(name: 'PUSH_TO_REGISTRY', defaultValue: false, description: '是否推送到镜像仓库')
     }
@@ -14,12 +17,9 @@ pipeline {
         stage('初始化') {
             steps {
                 script {
-                    env.IMAGE_TAG = params.VERSION ? "${params.VERSION}" : "${params.BRANCH}-${env.BUILD_NUMBER}"
-                    
                     echo "开始构建 Beancount-Trans-Docs 项目"
                     echo "分支: ${params.BRANCH}"
-                    echo "Node工具: ${params.NODE_TOOL}"
-                    echo "镜像标签: ${env.IMAGE_TAG}"
+                    echo "镜像标签参数: ${params.VERSION}"
                     echo "工作目录: ${env.WORKSPACE}"
                 }
             }
