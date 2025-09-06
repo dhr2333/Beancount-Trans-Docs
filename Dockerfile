@@ -1,5 +1,6 @@
 # 构建阶段
-FROM node:18-alpine AS builder
+ARG NODE_VERSION=18
+FROM node:${NODE_VERSION}-alpine AS builder
 
 WORKDIR /app
 
@@ -7,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安装依赖
-RUN npm ci --only=production
+RUN npm ci
 
 # 复制源代码
 COPY . .
@@ -18,7 +19,7 @@ RUN npm run build
 # 生产阶段 - 使用 Nginx
 FROM nginx:alpine
 
-# 复制 nginx 配置文件（如果存在）
+# 复制 nginx 配置文件
 COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
 
 # 从构建阶段复制构建好的文件
