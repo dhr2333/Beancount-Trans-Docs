@@ -32,8 +32,8 @@ pipeline {
                     branches: [[name: "*/${params.BRANCH}"]],
                     extensions: [],
                     userRemoteConfigs: [[
-                        url: 'git@github.com:dhr2333/Beancount-Trans-Docs.git',
-                        credentialsId: 'github-ssh-key'
+                        url: 'https://github.com/dhr2333/Beancount-Trans-Docs.git',
+                        credentialsId: '8a235621-ec9f-4f59-97c5-225b1c22764e'
                     ]]
                 ])
                 script {
