@@ -122,7 +122,7 @@ const config: Config = {
           items: [
             {
               label: '教程',
-              to: '/docs/beancount-trans-快速入门',
+              to: '/docs/quick-start',
             },
           ],
         },
