@@ -3,6 +3,9 @@ pipeline {
     triggers {
         pollSCM('')
     }
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+    }
     parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: '要构建的Git分支')
         string(name: 'VERSION', defaultValue: '', description: '镜像版本标签 (留空则使用Git Commit短哈希)')
@@ -53,7 +56,7 @@ pipeline {
         stage('构建Docker镜像') {
             steps {
                 script {
-                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}")
+                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--rm .")
                 }
             }
         }

@@ -86,6 +86,12 @@ const config: Config = {
     ],
   ],
 
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ['@docusaurus/theme-mermaid'],
+
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -166,6 +172,9 @@ const config: Config = {
     metadata: [
       {name: 'keywords', content: 'beancount, 复式记账, 中文文档, 财务工具'}
     ],
+    mermaid: {
+      theme: { light: 'default', dark: 'dark' }, // 为主题模式指定不同的mermaid主题
+    },
   } satisfies Preset.ThemeConfig,
 };
 
