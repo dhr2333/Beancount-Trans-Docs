@@ -11,32 +11,29 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: '随时随地访问',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        无论您身处何地，使用何种设备，均可无缝访问您的数据与文件。支持多平台同步，提供流畅的跨端体验，确保您的工作与协作永不中断。
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: '隐私优先',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        您的每个账本都运行在一个独立的、受保护的容器环境中，确保用户间的数据严格隔离。我们通过动态资源管理来提供高效且私密的访问体验
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: '支持自托管',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        提供完整的自托管解决方案，允许您在私有服务器上部署服务，完全掌握数据存储与管理流程，满足定制化需求与企业级合规要求。
       </>
     ),
   },

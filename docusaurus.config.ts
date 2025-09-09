@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Beancount-Trans',
-  tagline: 'Dinosaurs are cool',
+  tagline: '让无会计知识的普通用户也能轻松使用专业级复式记账工具，实现财务透明化管理',
   favicon: 'img/beancount-trans-logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -108,7 +108,16 @@ const config: Config = {
           position: 'left',
           label: '教程',
         },
-        { to: '/blog', label: '博客', position: 'left' },
+        {
+          to: '/blog',
+          position: 'left',
+          label: '博客'
+        },
+        {
+          to: 'https://trans.dhr2333.cn/api/redoc/',
+          position: 'left',
+          label: 'API'
+        },
         {
           type: 'localeDropdown', // 添加语言切换下拉菜单
           position: 'right',
