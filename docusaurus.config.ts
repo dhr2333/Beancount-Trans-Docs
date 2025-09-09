@@ -58,7 +58,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: ({locale, versionDocsDirPath, docPath}) => {
-            return `https://github.com/dhr2333/Beancount-Trans/tree/main/Beancount-Trans-Docs/${versionDocsDirPath}/${docPath}?language=${locale}`;
+            return `https://github.com/dhr2333/Beancount-Trans-Docs/blob/main/${versionDocsDirPath}/${docPath}?language=${locale}`;
           },
         },
         blog: {
@@ -72,7 +72,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: ({locale, blogPath}) => {
-            return `https://github.com/dhr2333/Beancount-Trans/tree/main/Beancount-Trans-Docs/blog/${blogPath}?language=${locale}`;
+            return `https://github.com/dhr2333/Beancount-Trans-Docs/blob/main/blog/${blogPath}?language=${locale}`;
           },
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
