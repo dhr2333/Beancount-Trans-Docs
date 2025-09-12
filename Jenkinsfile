@@ -56,7 +56,7 @@ pipeline {
         stage('构建Docker镜像') {
             steps {
                 script {
-                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--rm .")
+                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--force-rm .")
                 }
             }
         }
