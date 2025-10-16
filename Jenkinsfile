@@ -119,7 +119,7 @@ def updateGitHubStatus(String state, String description) {
         "context": "continuous-integration/jenkins/${env.BRANCH_NAME}"
     }
     """
-    
+
     // 使用GitHub Token更新状态
     try {
         withCredentials([string(credentialsId: '1b709f07-d907-4000-8a8a-2adafa6fc658', variable: 'GITHUB_TOKEN')]) {
