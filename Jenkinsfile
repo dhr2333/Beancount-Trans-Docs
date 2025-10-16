@@ -19,20 +19,28 @@ pipeline {
                 script {
                     echo "🚀 开始构建 Beancount-Trans-Docs 项目"
                     echo "分支: ${env.BRANCH_NAME}"
-                    updateGitHubStatus('pending', '开始构建...')
-
-                    // 获取Git Commit短哈希
+                    
+                    // 获取Git信息并保存到环境变量
                     env.GIT_COMMIT_SHORT = sh(
                         script: 'git rev-parse --short HEAD',
+                        returnStdout: true
+                    ).trim()
+                    
+                    env.GIT_COMMIT_FULL = sh(
+                        script: 'git rev-parse HEAD',
                         returnStdout: true
                     ).trim()
 
                     // 设置镜像标签
                     env.IMAGE_TAG = "git-${env.GIT_COMMIT_SHORT}"
-
+                    
                     echo "Git Commit短哈希: ${env.GIT_COMMIT_SHORT}"
+                    echo "Git Commit完整哈希: ${env.GIT_COMMIT_FULL}"
                     echo "最终镜像标签: ${env.IMAGE_TAG}"
                     echo "工作目录: ${env.WORKSPACE}"
+                    
+                    // 更新GitHub状态
+                    updateGitHubStatus('pending', '开始构建...')
                 }
             }
         }
@@ -100,12 +108,12 @@ pipeline {
 
 // 更新GitHub提交状态的函数
 def updateGitHubStatus(String state, String description) {
-    // 获取当前commit SHA
-    def commitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-
+    // 使用保存的Git commit SHA，如果不存在则尝试获取
+    def commitSha = env.GIT_COMMIT_FULL ?: sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+    
     // 构建Jenkins构建URL
     def targetUrl = "${env.BUILD_URL}"
-
+    
     // GitHub状态API payload
     def payload = """
     {
@@ -115,7 +123,7 @@ def updateGitHubStatus(String state, String description) {
         "context": "continuous-integration/jenkins/${env.BRANCH_NAME}"
     }
     """
-
+    
     // 使用GitHub Token更新状态
     try {
         withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
