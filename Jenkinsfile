@@ -1,54 +1,42 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM('')
-    }
+
     options {
         timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '3'))
     }
-    parameters {
-        string(name: 'BRANCH', defaultValue: 'main', description: '要构建的Git分支')
-        string(name: 'VERSION', defaultValue: '', description: '镜像版本标签 (留空则使用Git Commit短哈希)')
-        booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: '跳过测试步骤')
-        booleanParam(name: 'PUSH_TO_REGISTRY', defaultValue: false, description: '是否推送到镜像仓库')
-    }
+
     environment {
         REGISTRY = "harbor.dhr2333.cn/beancount-trans"
         IMAGE_NAME = "beancount-trans-docs"
+
+        // GitHub配置
+        GITHUB_REPO = 'dhr2333/Beancount-Trans-Docs'
+        GITHUB_API_URL = 'https://api.github.com'
     }
     stages {
         stage('初始化') {
             steps {
                 script {
-                    echo "开始构建 Beancount-Trans-Docs 项目"
-                    echo "分支: ${params.BRANCH}"
-                    echo "镜像标签参数: ${params.VERSION}"
-                    echo "工作目录: ${env.WORKSPACE}"
-                }
-            }
-        }
+                    echo "🚀 开始构建 Beancount-Trans-Docs 项目"
+                    echo "分支: ${env.BRANCH_NAME}"
+                    updateGitHubStatus('pending', '开始构建...')
 
-        stage('代码检出') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: "*/${params.BRANCH}"]],
-                    extensions: [],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/dhr2333/Beancount-Trans-Docs.git',
-                        credentialsId: '8a235621-ec9f-4f59-97c5-225b1c22764e'
-                    ]]
-                ])
-                script {
+                    // 获取Git信息并保存到环境变量
                     env.GIT_COMMIT_SHORT = sh(
                         script: 'git rev-parse --short HEAD',
                         returnStdout: true
                     ).trim()
-                    
-                    env.IMAGE_TAG = params.VERSION ?: "git-${env.GIT_COMMIT_SHORT}"
-                    
+
+                    // 设置镜像标签
+                    env.IMAGE_TAG = "git-${env.GIT_COMMIT_SHORT}"
+
                     echo "Git Commit短哈希: ${env.GIT_COMMIT_SHORT}"
                     echo "最终镜像标签: ${env.IMAGE_TAG}"
+                    echo "工作目录: ${env.WORKSPACE}"
+
+                    // 更新GitHub状态
+                    updateGitHubStatus('pending', '开始构建...')
                 }
             }
         }
@@ -56,62 +44,96 @@ pipeline {
         stage('构建Docker镜像') {
             steps {
                 script {
-                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--force-rm .")
-                }
-            }
-        }
+                    echo "🐳 构建Docker镜像..."
+                    updateGitHubStatus('pending', '正在构建镜像...')
 
-        stage('推送镜像') {
-            when {
-                expression { return params.PUSH_TO_REGISTRY }
-            }
-            steps {
-                script {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'docker-registry-cred',
-                        usernameVariable: 'REGISTRY_USER',
-                        passwordVariable: 'REGISTRY_PASSWORD'
-                    )]) {
-                        sh "echo ${REGISTRY_PASSWORD} | docker login -u ${REGISTRY_USER} --password-stdin ${env.REGISTRY}"
-                    }
-                    
-                    sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    sh "docker push ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    
-                    if (params.BRANCH == 'main' || params.BRANCH == 'master') {
-                        sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.REGISTRY}/${env.IMAGE_NAME}:latest"
-                        sh "docker push ${env.REGISTRY}/${env.IMAGE_NAME}:latest"
+                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--rm .")
+                    if (env.BRANCH_NAME == 'main') {
+                        sh "docker tag ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.REGISTRY}/${env.IMAGE_NAME}:latest"
                     }
                 }
             }
         }
 
 		stage('部署到服务器') {
+		    when {
+		        branch 'main'
+		    }
 		    steps {
 		        script {
+		            echo "🚀 开始部署到生产服务器..."
+		            updateGitHubStatus('pending', '正在部署...')
+
 		            sshagent([env.SSH_CREDENTIALS_ID]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no -p ${env.DEPLOY_PORT} root@${env.DEPLOY_SERVER} "cd /root/Manage && docker compose -f docker-compose-beancount-trans-docs.yaml down && sed -i 's|image:.*|image: ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}|' docker-compose-beancount-trans-docs.yaml && docker compose -f docker-compose-beancount-trans-docs.yaml up -d"
                         """
 		            }
+		            echo "✅ 部署完成"
 		        }
 		    }
 		}
     }
+
     post {
-        always {
-            cleanWs()
-        }
         success {
             script {
-                echo "Beancount-Trans-Docs 项目构建成功!"
-                if (params.PUSH_TO_REGISTRY) {
-                    echo "镜像已推送到: ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                echo '✅ 构建成功'
+                def message = env.BRANCH_NAME == 'main' ?
+                    "构建成功 ✓ | 已部署到生产环境" :
+                    "构建成功 ✓"
+                updateGitHubStatus('success', message)
+
+                if (env.BRANCH_NAME == 'main') {
+                    echo "🚀 已部署到生产环境"
                 }
             }
         }
+
         failure {
-            echo "Beancount-Trans-Docs 项目构建失败!"
+            script {
+                echo '❌ 构建失败'
+                updateGitHubStatus('failure', '构建或部署失败')
+            }
         }
+
+        always {
+            cleanWs()
+        }
+    }
+}
+
+// 更新GitHub提交状态的函数
+def updateGitHubStatus(String state, String description) {
+    // 使用保存的Git commit SHA，如果不存在则尝试获取
+    def commitSha = env.GIT_COMMIT ?: env.GIT_COMMIT_SHORT
+
+    // 构建Jenkins构建URL
+    def targetUrl = "${env.BUILD_URL}"
+
+    // GitHub状态API payload
+    def payload = """
+    {
+        "state": "${state}",
+        "target_url": "${targetUrl}",
+        "description": "${description}",
+        "context": "continuous-integration/jenkins/${env.BRANCH_NAME}"
+    }
+    """
+
+    // 使用GitHub Token更新状态
+    try {
+        withCredentials([string(credentialsId: '1b709f07-d907-4000-8a8a-2adafa6fc658', variable: 'GITHUB_TOKEN')]) {
+            sh """
+                curl -X POST \
+                    -H "Authorization: token \${GITHUB_TOKEN}" \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    ${GITHUB_API_URL}/repos/${GITHUB_REPO}/statuses/${commitSha} \
+                    -d '${payload}'
+            """
+        }
+        echo "GitHub状态已更新: ${state} - ${description}"
+    } catch (Exception e) {
+        echo "更新GitHub状态失败: ${e.message}"
     }
 }
