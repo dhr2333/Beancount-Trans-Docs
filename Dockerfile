@@ -1,6 +1,5 @@
 # 构建阶段
-ARG NODE_VERSION=18
-FROM node:${NODE_VERSION}-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 
