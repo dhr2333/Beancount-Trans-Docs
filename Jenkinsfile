@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS 25.1.0'
+    }
+
     options {
         timeout(time: 30, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '3'))
@@ -15,6 +19,15 @@ pipeline {
         GITHUB_API_URL = 'https://api.github.com'
     }
     stages {
+        stage('Node 环境信息') {
+            steps {
+                sh '''
+                    node --version || true
+                    npm --version || true
+                '''
+            }
+        }
+
         stage('初始化') {
             steps {
                 script {
@@ -50,6 +63,24 @@ pipeline {
                     docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--rm .")
                     if (env.BRANCH_NAME == 'main') {
                         sh "docker tag ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.REGISTRY}/${env.IMAGE_NAME}:latest"
+                    }
+                }
+            }
+        }
+
+        stage('语义化发布') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    echo "📝 运行 semantic-release，生成版本与发布记录..."
+                    withCredentials([string(credentialsId: '1b709f07-d907-4000-8a8a-2adafa6fc658', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            npm install
+                            npm ci
+                            npm run semantic-release
+                        '''
                     }
                 }
             }
