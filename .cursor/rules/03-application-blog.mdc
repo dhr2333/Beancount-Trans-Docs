@@ -1,0 +1,304 @@
+---
+globs: blog/**/*.md
+description: 应用层 - 博客文章规范
+---
+
+# 应用层：博客文章规范
+
+## Frontmatter 字段规范
+
+所有博客文章必须在文件开头包含 YAML Frontmatter，参考现有博客：[blog/2024-08-16-选型.md](mdc:blog/2024-08-16-选型.md)
+
+### 必需字段
+
+```yaml
+---
+tags:                        # 标签列表
+  - Project/Beancount-Trans
+title: 博客文章标题           # 文章显示标题（中文）
+aliases:                     # 别名列表（可选）
+  - 记账方式
+created_time: 2024-08-16 09:04:41  # 创建时间（YYYY-MM-DD HH:mm:ss）
+modify_time: 2025-02-15 09:18:19   # 修改时间（YYYY-MM-DD HH:mm:ss）
+published:                   # 发布渠道列表
+  - djangoblog
+  - beancount-trans-docs
+authors: dhr2333             # 作者标识符
+---
+```
+
+### 字段说明
+
+- **tags**：文章标签列表，使用数组格式，标签通常包含分类前缀，如 `Project/Beancount-Trans`
+- **title**：文章标题，使用中文，清晰描述文章内容
+- **aliases**：文章别名列表（可选），用于 URL 重定向或搜索
+- **created_time**：创建时间，格式为 `YYYY-MM-DD HH:mm:ss`
+- **modify_time**：最后修改时间，格式为 `YYYY-MM-DD HH:mm:ss`
+- **published**：发布渠道列表，可以包含多个渠道，如 `djangoblog`、`beancount-trans-docs`
+- **authors**：作者标识符，参考 `blog/authors.yml`
+
+### Frontmatter 示例
+
+```yaml
+---
+tags:
+  - Project/Beancount-Trans
+title: 【Beancount】1. 选型
+aliases:
+  - 记账方式
+created_time: 2024-08-16 09:04:41
+modify_time: 2025-02-15 09:18:19
+published:
+  - djangoblog
+  - beancount-trans-docs
+authors: dhr2333
+---
+```
+
+## 文件命名规范
+
+### 命名规则
+
+- **日期前缀**：使用 `YYYY-MM-DD` 格式的日期作为前缀
+- **描述性名称**：使用中文描述性名称，清晰表达文章内容
+- **文件扩展名**：统一使用 `.md` 扩展名
+- **命名格式**：`YYYY-MM-DD-描述性名称.md`
+
+```text
+// ✅ 正确示例
+2024-08-16-选型.md
+2024-08-17-借贷记账法.md
+2024-08-22-账单导出及查看方法.md
+
+// ❌ 错误示例
+选型.md                          # 缺少日期前缀
+2024-8-16-选型.md               # 日期格式错误（应为 08 而非 8）
+2024-08-16-选型.markdown        # 使用 .markdown 而非 .md
+2024/08/16-选型.md              # 日期不应使用目录分隔符
+```
+
+### 目录结构
+
+博客文章可以放在以下位置：
+
+1. **根目录**：直接放在 `blog/` 目录下（推荐）
+2. **子目录**：放在 `blog/YYYY-MM-DD-标题/` 目录下，目录内包含 `index.md`
+
+```text
+// ✅ 方式一：根目录（推荐）
+blog/
+├── 2024-08-16-选型.md
+├── 2024-08-17-借贷记账法.md
+└── authors.yml
+
+// ✅ 方式二：子目录
+blog/
+├── 2023-07-26-welcome/
+│   └── index.md
+└── authors.yml
+```
+
+## 标签和分类规范
+
+### 标签格式
+
+- **分类前缀**：使用分类前缀组织标签，如 `Project/Beancount-Trans`、`Tutorial/Getting-Started`
+- **标签命名**：使用英文，遵循 PascalCase 或 kebab-case
+- **标签列表**：在 `blog/tags.yml` 中定义所有可用标签
+
+```yaml
+---
+tags:
+  - Project/Beancount-Trans
+  - Tutorial/Getting-Started
+  - Feature/Account-Management
+---
+```
+
+### 标签管理
+
+- **统一标签**：参考 `blog/tags.yml` 中定义的标签列表
+- **新增标签**：如需新增标签，先在 `blog/tags.yml` 中定义
+- **标签分类**：使用斜杠 `/` 分隔分类和具体标签
+
+```yaml
+# blog/tags.yml 示例
+beancount-trans:
+  label: Beancount-Trans
+  permalink: /blog/tags/beancount-trans
+  description: Beancount-Trans 相关文章
+```
+
+## 博客文章结构
+
+### 标准文章结构
+
+参考现有博客文章：[blog/2024-08-16-选型.md](mdc:blog/2024-08-16-选型.md)
+
+```markdown
+---
+# Frontmatter
+---
+
+## 文章主标题（可选，通常由 title 字段提供）
+
+文章的开头段落，介绍文章主题和目标读者。
+
+## 第一部分
+
+### 子标题
+
+详细内容。
+
+## 第二部分
+
+详细内容。
+
+## 总结
+
+文章总结或下一步行动建议。
+```
+
+### 文章组织建议
+
+- **开头段落**：简要介绍文章主题和目标读者
+- **主体内容**：按照逻辑顺序组织内容，使用清晰的标题层级
+- **总结段落**：在文章末尾添加总结或相关文章链接
+
+```markdown
+## 记账方式
+
+首先先回答我几个问题：
+
+1. 为什么要记账，换句话说记账的目的是什么？
+2. 现有的记账方式不满足需求吗？
+
+### 对自己有清晰的认知
+
+接第一个问题，为什么要记账...
+```
+
+## 作者管理
+
+### 作者配置
+
+作者信息在 `blog/authors.yml` 中定义：
+
+```yaml
+# blog/authors.yml
+dhr2333:
+  name: Dai Haorui
+  title: Beancount-Trans 开发者
+  url: https://github.com/dhr2333
+  image_url: https://github.com/dhr2333.png
+```
+
+### 使用作者
+
+在 Frontmatter 中使用作者标识符：
+
+```yaml
+---
+authors: dhr2333
+---
+```
+
+## 博客文章格式要求
+
+### 标题层级
+
+- **文章标题**：由 Frontmatter 的 `title` 字段提供，Markdown 中可以从 `##` 开始
+- **章节标题**：使用 `##` 作为一级标题
+- **子章节**：使用 `###` 作为二级标题
+
+```markdown
+## 记账方式
+
+首先先回答我几个问题...
+
+### 对自己有清晰的认知
+
+接第一个问题...
+```
+
+### 内容格式
+
+- **段落**：保持段落简洁，每段 3-5 句话
+- **列表**：使用有序列表或无序列表组织内容
+- **代码块**：为代码块指定语言标识
+- **引用**：使用引用块突出重要信息
+
+```markdown
+## 为什么要选择复式记账？
+
+相比普通的流水账，复式记账的核心理念是：
+
+1. **账户之间的进出关系**：要求所有的记录全部入账
+2. **账目完整性**：保证账目的完整性和一致性
+3. **报表生成**：可以提供损益表、资产负债表等报表
+
+> **核心原则**："有借必有贷，借贷必相等"
+```
+
+## 博客文章最佳实践
+
+### 内容质量
+
+- **清晰表达**：使用简洁明了的语言，避免过于技术化的表述
+- **结构完整**：包含引言、主体和总结
+- **示例丰富**：提供实际示例和代码片段
+- **链接相关**：在文章末尾添加相关文章链接
+
+### 可读性
+
+- **段落长度**：保持段落简短，每段 3-5 句话
+- **标题清晰**：使用描述性的标题，清晰表达章节内容
+- **视觉元素**：适当使用列表、表格、代码块等增强可读性
+
+### SEO 优化
+
+- **标题优化**：使用清晰、描述性的标题
+- **标签准确**：使用相关的标签提高文章可发现性
+- **内容完整**：提供完整、有价值的内容
+
+## 博客文章维护
+
+### 更新文章时
+
+- **更新 modify_time**：每次修改文章时更新 `modify_time` 字段
+- **保持 created_time**：`created_time` 字段不应修改，保持原始创建时间
+- **更新内容**：如果文章内容有重大变更，在文章开头或末尾添加更新说明
+
+### 文章版本控制
+
+- 使用 Git 管理文章版本
+- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范
+- 重要更新应在文章中记录变更历史
+
+## 博客文章链接规范
+
+### 内部链接
+
+**重要说明**：为了确保链接在 Obsidian 和 Docusaurus 中都能正常工作，**推荐使用完整 URL**。
+
+#### 推荐方式：完整 URL
+
+```markdown
+// ✅ 推荐：完整 URL（内部博客链接）
+更多信息请查看 [借贷记账法](https://trans.dhr2333.cn/docs/blog/2024/08/17/借贷记账法)
+
+// ✅ 推荐：完整 URL（外部链接）
+访问 [Beancount-Trans 项目](https://github.com/dhr2333/Beancount-Trans)
+```
+
+### 相关文章
+
+在文章末尾添加相关文章链接，使用完整 URL：
+
+```markdown
+## 相关文章
+
+- [借贷记账法](https://trans.dhr2333.cn/docs/blog/2024/08/17/借贷记账法)
+- [高级用法](https://trans.dhr2333.cn/docs/blog/2024/08/18/高级用法)
+- [结余和资产](https://trans.dhr2333.cn/docs/blog/2024/08/19/结余和资产)
+```
