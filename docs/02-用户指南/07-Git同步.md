@@ -5,7 +5,7 @@ slug: git-sync
 type: Write
 date: 2025-12-10
 created_time: 2025-12-10 10:07:40
-modify_time: 2025-12-13 09:49:44
+modify_time: 2025-12-20 09:07:44
 authors: dhr2333
 doc_status:
 published:
@@ -41,7 +41,7 @@ flowchart TD
     subgraph B[第二阶段：使用 Git 同步]
         direction TB
         B1[📝 本地编辑账本] --> B2[💾 git add & commit]
-        B2 --> B3[⬆️ git push 到平台]
+        B2 --> B3[⬆️ git push 到远程仓库]
         B3 --> B4[🔄 平台自动同步]
         B4 --> B5[📊 在平台查看报表]
     end
@@ -62,7 +62,7 @@ flowchart TD
 ### 1. 进入设置页面
 
 1. 登录 Beancount-Trans 平台
-2. 点击右上角用户头像，选择 **「个人设置」**
+2. 悬停右上角用户名称，选择 **「个人设置」**
 3. 在设置页面中找到 **「Git 同步」** Tab
 
 ### 2. 选择仓库创建方式
@@ -125,14 +125,14 @@ EOF
 配置好 SSH 后，就可以将仓库克隆到本地了：
 
 ```shell
-# 方式一：使用配置的 SSH 别名（推荐）
-git clone gitea-beancount:beancount-trans/beancount-{用户ID}.git ~/my-beancount
+# 方式一：使用 SSH 并配置仓库别名（推荐）
+git clone gitea-beancount:beancount-trans/{uuid}-assets.git Assets
 
-# 方式二：使用完整的 SSH URL
-git clone ssh://git@gitea.dhr2333.cn:30022/beancount-trans/beancount-{用户ID}.git ~/my-beancount
+# 方式二：使用完整的 SSH URL 并指定密钥
+git clone -c core.sshCommand='ssh -i ~/.ssh/your_private_key -p 30022' ssh://git@gitea.dhr2333.cn:30022/beancount-trans/{uuid}-assets.git Assets
 ```
 
-> **💡 提示**：`{用户ID}` 是平台为您分配的数字 ID，可以在 Git 同步设置页面查看完整的仓库地址。
+> **💡 提示**：`{uuid}` 是平台为您分配的数字 ID
 
 克隆成功后，您就可以在本地编辑账本了！
 
@@ -143,7 +143,7 @@ git clone ssh://git@gitea.dhr2333.cn:30022/beancount-trans/beancount-{用户ID}.
 使用您熟悉的编辑器（如 VS Code）打开克隆的仓库目录，开始编辑账本文件：
 
 ```shell
-cd ~/my-beancount
+cd Assets/
 code .  # 使用 VS Code 打开
 ```
 
@@ -175,11 +175,13 @@ git push origin main
 
 ### 3. 触发平台同步
 
+平台同步用于将账本从远程仓库拉取到平台，供 Fava 读取展示
+
 推送后，有两种方式让平台同步您的修改：
 
 #### 方式一：自动同步（Webhook）
 
-如果配置了 Webhook，平台会在您 push 后自动同步，无需手动操作。
+远程仓库默认配置 Webhook 并与平台集成，平台会在您 Push 后自动同步，无需手动操作。
 
 #### 方式二：手动同步
 
@@ -247,7 +249,6 @@ trans/
 这样可以确保：
 
 - 平台解析结果不会被 Git 管理，避免冲突
-- 临时文件和系统文件不会被提交
 - 用户完全控制需要版本控制的内容
 
 ### 非模板用户规范要求
@@ -300,7 +301,7 @@ include "trans/main.bean"
 重新生成后，您需要按照以下步骤操作：
 
 1. 下载新的 Deploy Key
-2. 更新本地 SSH 配置中的密钥路径
+2. 设置密钥文件权限，并更新本地 SSH 配置中的密钥路径
 
 **Q4: 本地修改和平台解析结果会产生冲突吗？**
 
@@ -313,6 +314,7 @@ include "trans/main.bean"
 - 定期归档历史年份的账本
 - 使用 Git 的压缩功能
 - 避免在仓库中存储大文件（如图片、PDF 等）
+- 通过 [邮箱](mailto:dhr2diary@gmail.com) 联系开发者调整
 
 **Q6: 可以在多个设备上使用同一个仓库吗？**
 
