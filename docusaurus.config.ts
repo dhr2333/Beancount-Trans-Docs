@@ -142,7 +142,7 @@ const config: Config = {
           label: '博客'
         },
         {
-          to: 'https://trans.dhr2333.cn/api/redoc/',
+          to: 'https://trans.dhr2333.cn/api/docs/',
           position: 'left',
           label: 'API'
         },
