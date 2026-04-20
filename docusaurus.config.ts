@@ -1,8 +1,14 @@
+import 'dotenv/config';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const algoliaAppId = process.env.DOCSEARCH_APP_ID;
+const algoliaApiKey = process.env.DOCSEARCH_API_KEY;
+const algoliaIndexName = process.env.DOCSEARCH_INDEX_NAME;
+const hasAlgoliaConfig = Boolean(algoliaAppId && algoliaApiKey && algoliaIndexName);
 
 const config: Config = {
   title: 'Beancount-Trans',
@@ -222,6 +228,16 @@ const config: Config = {
     mermaid: {
       theme: { light: 'default', dark: 'dark' }, // 为主题模式指定不同的mermaid主题
     },
+    ...(hasAlgoliaConfig
+      ? {
+          algolia: {
+            appId: algoliaAppId!,
+            apiKey: algoliaApiKey!,
+            indexName: algoliaIndexName!,
+            contextualSearch: true,
+          },
+        }
+      : {}),
   } satisfies Preset.ThemeConfig,
 };
 
