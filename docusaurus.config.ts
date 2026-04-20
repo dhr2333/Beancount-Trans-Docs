@@ -103,6 +103,18 @@ const config: Config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'developer',
+        path: 'docs-dev',
+        routeBasePath: 'developer',
+        sidebarPath: './sidebarsDeveloper.ts',
+        editUrl: ({locale, versionDocsDirPath, docPath}) => {
+          return `https://github.com/dhr2333/Beancount-Trans-Docs/blob/main/${versionDocsDirPath}/${docPath}?language=${locale}`;
+        },
+      },
+    ],
+    [
       'vercel-analytics',
       {
         debug: true,
@@ -134,21 +146,19 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: '教程',
+          label: '文档',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'developerSidebar',
+          docsPluginId: 'developer',
+          position: 'left',
+          label: '开发者',
         },
         {
           to: '/blog',
           position: 'left',
           label: '博客'
-        },
-        {
-          to: 'https://trans.dhr2333.cn/api/docs/',
-          position: 'left',
-          label: 'API'
-        },
-        {
-          type: 'localeDropdown', // 添加语言切换下拉菜单
-          position: 'right',
         },
         {
           href: 'https://github.com/dhr2333/Beancount-Trans',
