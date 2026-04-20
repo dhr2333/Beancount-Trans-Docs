@@ -28,3 +28,9 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Hide selected docs/categories from sidebar while keeping routes accessible. */
+.theme-doc-sidebar-item-link.hidden-sidebar-item,
+.theme-doc-sidebar-item-category.hidden-sidebar-item {
+  display: none !important;
+}
