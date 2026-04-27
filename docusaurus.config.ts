@@ -181,7 +181,7 @@ const config: Config = {
           items: [
             {
               label: '教程',
-              to: '/docs/quick-start',
+              to: '/教程/quick-start',
             },
           ],
         },
