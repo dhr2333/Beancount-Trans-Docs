@@ -25,11 +25,6 @@ const config: Options = {
             files: ['package.json'],
             pattern: '"version": "[^"]+"',
             replacement: '"version": "${nextRelease.version}"'
-          },
-          {
-            files: ['docs/06-版本更新日志.md'],
-            pattern: '## v[^\\n]+',
-            replacement: '## v${nextRelease.version}'
           }
         ]
       }
@@ -37,11 +32,7 @@ const config: Options = {
     [
       '@semantic-release/git',
       {
-        assets: [
-          'package.json',
-          'package-lock.json',
-          'docs/06-版本更新日志.md'
-        ],
+        assets: ['package.json', 'package-lock.json'],
         message:
           'chore(docs): release docs v${nextRelease.version}\n\n${nextRelease.notes}'
       }
