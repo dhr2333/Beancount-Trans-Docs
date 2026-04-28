@@ -59,8 +59,28 @@ pipeline {
                 script {
                     echo "🐳 构建Docker镜像..."
                     updateGitHubStatus('pending', '正在构建镜像...')
+                    withCredentials([
+                        string(credentialsId: 'docsearch-app-id', variable: 'DOCSEARCH_APP_ID'),
+                        string(credentialsId: 'docsearch-api-key', variable: 'DOCSEARCH_API_KEY'),
+                        string(credentialsId: 'docsearch-index-name', variable: 'DOCSEARCH_INDEX_NAME')
+                    ]) {
+                        sh '''
+                            for key in DOCSEARCH_APP_ID DOCSEARCH_API_KEY DOCSEARCH_INDEX_NAME; do
+                                if [ -z "$(eval echo \\$$key)" ]; then
+                                    echo "❌ 缺少必需凭据: ${key}"
+                                    exit 1
+                                fi
+                            done
+                        '''
 
-                    docker.build("${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}", "--rm .")
+                        docker.build(
+                            "${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG}",
+                            "--rm " +
+                            "--build-arg DOCSEARCH_APP_ID=${DOCSEARCH_APP_ID} " +
+                            "--build-arg DOCSEARCH_API_KEY=${DOCSEARCH_API_KEY} " +
+                            "--build-arg DOCSEARCH_INDEX_NAME=${DOCSEARCH_INDEX_NAME} ."
+                        )
+                    }
                     if (env.BRANCH_NAME == 'main') {
                         sh "docker tag ${env.REGISTRY}/${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.REGISTRY}/${env.IMAGE_NAME}:latest"
                     }

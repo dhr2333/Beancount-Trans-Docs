@@ -12,6 +12,11 @@ RUN npm ci
 # 复制源代码
 COPY . .
 
+# Algolia DocSearch build-time variables
+ARG DOCSEARCH_APP_ID
+ARG DOCSEARCH_API_KEY
+ARG DOCSEARCH_INDEX_NAME
+
 # 构建应用
 RUN npm run build
 
