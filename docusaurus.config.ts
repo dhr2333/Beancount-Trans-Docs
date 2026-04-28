@@ -234,7 +234,7 @@ const config: Config = {
             appId: algoliaAppId!,
             apiKey: algoliaApiKey!,
             indexName: algoliaIndexName!,
-            contextualSearch: true,
+            contextualSearch: false,
           },
         }
       : {}),
