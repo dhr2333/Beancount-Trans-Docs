@@ -92,7 +92,7 @@ const config: Config = {
           // anonymizeIP: true,
         },
         sitemap: {
-          lastmod: 'date',
+          lastmod: null,
           changefreq: 'weekly',
           priority: 0.5,
           ignorePatterns: ['/tags/**'],
