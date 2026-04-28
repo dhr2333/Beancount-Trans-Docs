@@ -5,6 +5,8 @@ description: 基础层 - Markdown 格式规范
 
 # 基础层：Markdown 格式规范
 
+`docs/`、`docs-dev/` 下的文档在**写什么、写多长、章节怎么组织**上须遵循 Diátaxis，见 [02-application-docs-structure.mdc](mdc:.cursor/rules/02-application-docs-structure.mdc)。
+
 ## Markdown 语法规范
 
 ### 标题层级

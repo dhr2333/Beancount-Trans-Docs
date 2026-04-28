@@ -1,8 +1,14 @@
+import 'dotenv/config';
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const algoliaAppId = process.env.DOCSEARCH_APP_ID;
+const algoliaApiKey = process.env.DOCSEARCH_API_KEY;
+const algoliaIndexName = process.env.DOCSEARCH_INDEX_NAME;
+const hasAlgoliaConfig = Boolean(algoliaAppId && algoliaApiKey && algoliaIndexName);
 
 const config: Config = {
   title: 'Beancount-Trans',
@@ -86,7 +92,7 @@ const config: Config = {
           // anonymizeIP: true,
         },
         sitemap: {
-          lastmod: 'date',
+          lastmod: null,
           changefreq: 'weekly',
           priority: 0.5,
           ignorePatterns: ['/tags/**'],
@@ -102,6 +108,18 @@ const config: Config = {
   ],
 
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'developer',
+        path: 'docs-dev',
+        routeBasePath: 'developer',
+        sidebarPath: './sidebarsDeveloper.ts',
+        editUrl: ({locale, versionDocsDirPath, docPath}) => {
+          return `https://github.com/dhr2333/Beancount-Trans-Docs/blob/main/${versionDocsDirPath}/${docPath}?language=${locale}`;
+        },
+      },
+    ],
     [
       'vercel-analytics',
       {
@@ -134,21 +152,19 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: '教程',
+          label: '文档',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'developerSidebar',
+          docsPluginId: 'developer',
+          position: 'left',
+          label: '开发者',
         },
         {
           to: '/blog',
           position: 'left',
           label: '博客'
-        },
-        {
-          to: 'https://trans.dhr2333.cn/api/docs/',
-          position: 'left',
-          label: 'API'
-        },
-        {
-          type: 'localeDropdown', // 添加语言切换下拉菜单
-          position: 'right',
         },
         {
           href: 'https://github.com/dhr2333/Beancount-Trans',
@@ -165,7 +181,7 @@ const config: Config = {
           items: [
             {
               label: '教程',
-              to: '/docs/quick-start',
+              to: '/教程/quick-start',
             },
           ],
         },
@@ -212,6 +228,16 @@ const config: Config = {
     mermaid: {
       theme: { light: 'default', dark: 'dark' }, // 为主题模式指定不同的mermaid主题
     },
+    ...(hasAlgoliaConfig
+      ? {
+          algolia: {
+            appId: algoliaAppId!,
+            apiKey: algoliaApiKey!,
+            indexName: algoliaIndexName!,
+            contextualSearch: true,
+          },
+        }
+      : {}),
   } satisfies Preset.ThemeConfig,
 };
 
