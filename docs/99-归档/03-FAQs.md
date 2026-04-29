@@ -4,8 +4,8 @@ title: FAQs
 slug: faqs
 type: Write
 date: 2025-08-21
-created_time: 2025-08-21 13:14:36
-modify_time: 2025-09-12 14:48:58
+created_time: 2025-08-21T13:14:36
+modify_time: 2026-04-29T10:02:56
 authors: dhr2333
 doc_status: Published
 published:
@@ -97,6 +97,6 @@ published_time: 2025-09-12 16:07:00
 如果本文档未能解决您的问题，您可以通过以下方式联系我们：
 
 1. **提交 [GitHub Issue](https://github.com/dhr2333/Beancount-Trans/issues)**:
-    - 🐛 **报告 Bug**：请详细描述问题现象、复现步骤和错误日志。
-    - 💡 **提出新功能**：清晰地描述您的需求和使用场景。
+	- 🐛 **报告 Bug**：请详细描述问题现象、复现步骤和错误日志。
+	- 💡 **提出新功能**：清晰地描述您的需求和使用场景。
 2. 发送邮件：[Dai_Haorui@163.com](mailto:Dai_Haorui@163.com)
