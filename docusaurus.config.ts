@@ -183,36 +183,44 @@ const config: Config = {
               label: '教程',
               to: '/教程/quick-start',
             },
+            {
+              label: '博客',
+              to: '/blog',
+            },
           ],
         },
         {
           title: '社区',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'GitHub Discussions',
+              href: 'https://github.com/dhr2333/Beancount-Trans/discussions',
             },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
-            },
+            // {
+            //   label: 'Stack Overflow',
+            //   href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+            // },
+            // {
+            //   label: 'Discord',
+            //   href: 'https://discordapp.com/invite/docusaurus',
+            // },
+            // {
+            //   label: 'X',
+            //   href: 'https://x.com/docusaurus',
+            // },
           ],
         },
         {
           title: '更多',
           items: [
             {
-              label: '博客',
-              to: '/blog',
+              label: '收录于 Awesome Beancount',
+              to: 'https://awesome-beancount.com/#china',
             },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/dhr2333/Beancount-Trans',
-            },
+            // {
+            //   label: 'GitHub',
+            //   href: 'https://github.com/dhr2333/Beancount-Trans',
+            // },
           ],
         },
       ],
