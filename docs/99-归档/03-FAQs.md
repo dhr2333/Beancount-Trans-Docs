@@ -7,10 +7,13 @@ date: 2025-08-21
 created_time: 2025-08-21T13:14:36
 modify_time: 2026-04-29T10:02:56
 authors: dhr2333
-doc_status: Published
-published:
-  - beancount-trans-docs
+status: Published
+channels:
+  - Beancount-Trans-Docs
 published_time: 2025-09-12 16:07:00
+content_type: Article
+domain: 项目文档
+quadrant: 案例故事
 ---
 本文档汇集了 Beancount-Trans 用户最常见的问题。请先根据您的问题类别进行浏览，如果未能找到答案，欢迎通过文末的渠道联系我们。
 

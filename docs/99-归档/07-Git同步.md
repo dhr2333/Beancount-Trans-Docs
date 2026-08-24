@@ -7,10 +7,13 @@ date: 2025-12-10
 created_time: 2025-12-10T10:07:40
 modify_time: 2026-04-29T09:23:26
 authors: dhr2333
-doc_status:
-published:
-  - beancount-trans-docs
+status: Published
+channels:
+  - Beancount-Trans-Docs
 published_time: 2025-12-10 10:07:40
+content_type: Article
+domain: 项目文档
+quadrant: 实操教程
 ---
 Git 同步功能让您能够将本地 Beancount 账本与平台无缝集成，享受版本控制、本地编辑和平台解析的强大组合。无论您是已有账本需要迁移，还是希望使用熟悉的编辑器进行账本管理，Git 同步都能满足您的需求。
 
