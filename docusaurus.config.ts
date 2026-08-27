@@ -12,7 +12,7 @@ const hasAlgoliaConfig = Boolean(algoliaAppId && algoliaApiKey && algoliaIndexNa
 
 const config: Config = {
   title: 'Beancount-Trans',
-  tagline: '让无会计知识的普通用户也能轻松使用专业级复式记账工具，实现财务透明化管理',
+  tagline: '用复盘，代替记账。看清财务状况，支撑生活中各类与钱相关的决策。',
   favicon: 'img/beancount-trans-logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -179,6 +179,10 @@ const config: Config = {
         {
           title: '文档',
           items: [
+            {
+              label: '核心主张',
+              to: '/解释/core-claim',
+            },
             {
               label: '教程',
               to: '/教程/quick-start',
