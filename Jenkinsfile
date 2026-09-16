@@ -54,6 +54,17 @@ pipeline {
             }
         }
 
+        stage('停止占用内存的容器') {
+            steps {
+                script {
+                    echo "⏹️ 构建前停止占用内存的容器（beancount-trans-beat, odoo19）..."
+                    sh '''
+                        docker stop beancount-trans-beat odoo19 2>/dev/null || true
+                    '''
+                }
+            }
+        }
+
         stage('构建Docker镜像') {
             steps {
                 script {
@@ -170,6 +181,10 @@ pipeline {
         }
 
         always {
+            script {
+                echo "▶️ 重新启动构建前停止的容器（beancount-trans-beat, odoo19）..."
+                sh 'docker start beancount-trans-beat odoo19 2>/dev/null || true'
+            }
             cleanWs()
         }
     }
