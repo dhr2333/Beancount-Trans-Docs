@@ -5,7 +5,7 @@ slug: copilot
 type: Write
 date: 2026-09-23
 created_time: 2026-09-23T08:40:27
-modify_time: 2026-09-23T11:29:54
+modify_time: 2026-09-23T16:00:00
 authors: dhr2333
 status: Published
 channels:
@@ -61,9 +61,9 @@ Copilot 是平台内置的账本助手：用自然语言问账、做复盘，并
 - 这类问题会自动进入 **「洞察模式」**，无需额外开关
 
 <details>
-<summary>复盘内容没有深度或分析不全面？</summary>
+<summary>为什么有些提问会进入洞察模式，有些不会？</summary>
 
-账本的信息或记录不足，没法全量、多维度、多批次地分析。
+判定条件（关键词、提问长度、是否属于纯事实问句）见 [Copilot 字段与限制](https://trans.dhr2333.cn/docs/%E5%8F%82%E8%80%83/copilot-reference)。
 
 </details>
 
@@ -71,6 +71,13 @@ Copilot 是平台内置的账本助手：用自然语言问账、做复盘，并
 
 1. 在同一个对话中描述一笔交易，例如「今天在超市花了 88 元，用支付宝」。
 2. 等待回执。
+
+<details>
+<summary>哪些字段必须说清、哪些可以省略？</summary>
+
+说清的字段模型直接采用，没说的按缺省补全；必填字段、缺省值与约束见 [Copilot 字段与限制](https://trans.dhr2333.cn/docs/%E5%8F%82%E8%80%83/copilot-reference)。
+
+</details>
 
 您应看到：
 
@@ -106,6 +113,6 @@ Copilot 一次性**最多支持 10 条**记录。
 
 ## 下一步
 
-- 查账、复盘与记账的完整任务清单、限制与排错：[用 Copilot 查账、分析与生成待办](../02-操作指南/04-Copilot.md)
-- 为什么记账要先过审核：[为什么我一定要保留审核](Bundles/Beancount-Trans/Beancount-Trans-Docs/docs/04-解释/02-为什么我一定要保留审核.md)
+- 记账字段、洞察触发条件与写入目标：[Copilot 字段与限制](https://trans.dhr2333.cn/docs/%E5%8F%82%E8%80%83/copilot-reference)
+- 为什么记账要先过审核：[为什么我一定要保留审核](https://trans.dhr2333.cn/docs/%E8%A7%A3%E9%87%8A/review)
 - 想让 Claude Code / Cursor 也能读这份账本：[接入 AI 客户端](../02-操作指南/03-接入%20AI%20客户端.md)
