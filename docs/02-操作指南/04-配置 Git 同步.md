@@ -22,11 +22,13 @@ published_url:
 
 ## 托管到平台能得到什么
 
-- **移动端随时可用**：手机 App（目前仅支持 Android）用手机号验证码登录，即可随时查看账本、做决策前分析或记录条目，不必回到电脑前。下载入口见 [Releases](https://github.com/dhr2333/Beancount-Trans-Mobile/releases)。
-- **更贴合语义的分析**：平台的账户目录与标签目录（含中文描述）会作为上下文交给 Copilot，您口语里的类别能对应到 `account ~` / `'完整标签路径' IN tags` 这类条件；回答里出现的是您自己的账户与标签，而不是陌生的英文账户名。
-- **可只读分享**：把这份账本以只读方式分享给家人或配偶，也可以交给 AI 客户端：见 [分享账本给他人](https://trans.dhr2333.cn/docs/%E6%95%99%E7%A8%8B/share-ledger) 与 [接入 AI 客户端](https://trans.dhr2333.cn/docs/%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/connect-ai-client)。
+- **移动端**：通过手机 App（目前仅支持 Android）随时查看账本、做决策前分析或记录条目。下载入口见 [Releases](https://github.com/dhr2333/Beancount-Trans-Mobile/releases)。
+- **更贴合语义的分析**：平台的账户目录与标签目录（含中文描述）会作为上下文交给 Copilot，回答中出现的也是您自己的账户与标签。
+- **只读分享**：把这份账本以只读方式分享给家人或配偶，也可以交给 AI 客户端：见 [分享账本给他人](https://trans.dhr2333.cn/docs/%E6%95%99%E7%A8%8B/share-ledger) 与 [接入 AI 客户端](https://trans.dhr2333.cn/docs/%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/connect-ai-client)。
 
-> **托管也意味着数据放在平台上**。完整的数据流与设计取舍见 [数据流隐私上的设计](https://trans.dhr2333.cn/docs/%E8%A7%A3%E9%87%8A/privacy)；若希望数据完全留在自己的机器上，可参考 [自托管](https://trans.dhr2333.cn/docs/developer/self-host)。
+![移动端](https://daihaorui.oss-cn-hangzhou.aliyuncs.com/djangoblog/20260929133904086.jpg)
+
+> **托管也意味着数据放在平台上**：完整的数据流与设计取舍见 [数据流隐私上的设计](https://trans.dhr2333.cn/docs/%E8%A7%A3%E9%87%8A/privacy)；若希望数据完全留在自己的机器上，可参考 [自托管](https://trans.dhr2333.cn/docs/developer/self-host)。
 
 ## 您将完成什么
 
@@ -38,12 +40,6 @@ published_url:
 
 - 账本已经在您自己的 Git 远程仓库里，想在平台上继续看报表、用 Copilot 分析；
 - 习惯用编辑器 + Git 管理账本，希望平台也能读到最新内容；
-- 想把这份账本就着平台分享给他人：见 [分享账本给他人](https://trans.dhr2333.cn/docs/%E6%95%99%E7%A8%8B/share-ledger)。
-
-## 前置条件与限制
-
-- 您有一个可访问、并能向它推送的 Git 仓库（下面的「关联已有远程」可以让您继续使用现有的仓库）。
-- 平台**只拉取、不推送**您的账本，同步以**远程仓库为准**。
 
 > 如果您还没有账本，可以先按 [快速入门](https://trans.dhr2333.cn/docs/%E6%95%99%E7%A8%8B/quick-start) 上传账单并解析，不必使用 Git 同步。
 
@@ -60,7 +56,24 @@ published_url:
 | **空仓库创建**  | **已有账本的用户**（页面标注为「推荐迁移用户」） | 建一个空仓库，等您把现有账本推上来                          |
 | **关联已有远程** | 账本已经在自己的 Git 远程仓库上         | 关联您现有的仓库；平台生成**只读拉取**用的密钥，推送仍使用您自己的 Git 凭据 |
 
-> **注意**：选择「空仓库创建」或「关联已有远程」时，您自己组织的账本里**必须包含** `include "trans/main.bean"` 这一行（写在仓库根目录的主文件 `main.bean` 中）；否则平台解析出的账单**不会**显示在您的账本里。可以对照标准模板 [Beancount-Trans-Assets](https://github.com/dhr2333/Beancount-Trans-Assets) 补齐。
+### 自带账本的用户：改造这三处即可
+
+当您选择「空仓库创建」或「关联已有远程」时，需要按下面三条简单改造账本结构：
+
+- **入口文件为根目录下的 `main.bean`**。
+- **`main.bean` 里要有 `include "trans/main.bean"`**。
+- **`.gitignore` 里要有 `trans/`**。
+
+<details>
+<summary>平台推荐的目录结构大致长什么样</summary>
+
+- `main.bean`：主账本入口（包含各条 include）
+- `account/`：账户定义
+- `20XX_template/` 等：按年份组织的交易记录
+- `trans/`：**平台管理**的解析产物（被 `.gitignore` 忽略）
+
+可对照模板仓库 [Beancount-Trans-Assets](https://github.com/dhr2333/Beancount-Trans-Assets)。
+</details>
 
 ### 下载 Deploy Key 并配置 SSH
 
@@ -104,31 +117,6 @@ git push origin main
 
 - 打开 **「 Fava」** 能看到您刚推送的账户与交易。
 
-## 约定与边界
-
-- `main.bean` 必须放在**仓库根目录**（平台固定以仓库根目录下的 `main.bean` 作为账本入口）。
-- 平台默认模板的 `main.bean` 里有一行 `include "trans/main.bean"`；`trans/` 是**平台的解析产物**（账单解析结果），被 `.gitignore` 忽略、不进 Git。
-- 想同时在平台上看到**您自己的账本**与**平台解析出的账单**，建议沿用默认模板的结构（`main.bean` 在根目录、且包含 `include "trans/main.bean"`）；去掉这一行后，平台的解析结果不会显示在您的账本里。
-
-| 行为 | 说明 |
-| :--- | :--- |
-| 同步方向 | **平台只拉取、不推送**您的账本；同步以**远程仓库为准** |
-| 与解析产物的关系 | 同步时会先备份并保留 `trans/`，平台解析结果不会被覆盖 |
-| 自动同步 | 仓库默认配置 Webhook，推送后平台自动同步 |
-| 手动同步 | 在「Git 同步」页点 **「立即同步」** |
-| 取消同步 | 清除 Git 引入的账本内容并暂停自动拉取，**保留 `trans/` 解析结果** |
-| 下载解析结果 | 在该页可把 `trans/` 打包下载（ZIP） |
-
-<details>
-<summary>模板的目录结构大致长什么样</summary>
-
-- `main.bean`：主账本入口（包含各条 include）
-- `account/`：账户定义
-- `20XX_template/` 等：按年份组织的交易记录
-- `trans/`：**平台管理**的解析产物（被 `.gitignore` 忽略）
-
-</details>
-
 ## 常见问题
 
 **Q1：Git 仓库会和平台解析结果冲突吗？**
@@ -137,7 +125,7 @@ git push origin main
 
 **Q2：仓库大小有限制吗？**
 
-**A：** 有。具体阈值以平台提示为准。建议定期归档历史年份的账本，避免提交图片、PDF 等大文件。如果确实有大仓库需求，可以使用「关联已有远程」方式。
+**A：** 有，具体阈值以平台提示为准，避免提交图片、PDF 等大文件。如果确实有大仓库需求，可以使用「关联已有远程」方式。
 
 ## 延伸阅读
 
