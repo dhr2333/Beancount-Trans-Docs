@@ -162,6 +162,11 @@ const config: Config = {
           label: '开发者',
         },
         {
+          href: 'https://www.dhr2333.cn/category/beancount-trans.html',
+          label: '博客',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/dhr2333/Beancount-Trans',
           label: 'GitHub',
           position: 'right',
