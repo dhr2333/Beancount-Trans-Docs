@@ -26,8 +26,6 @@ published_url:
 - **更贴合语义的分析**：平台的账户目录与标签目录（含中文描述）会作为上下文交给 Copilot，回答中出现的也是您自己的账户与标签。
 - **只读分享**：把这份账本以只读方式分享给家人或配偶，也可以交给 AI 客户端：见 [分享账本给他人](https://trans.dhr2333.cn/docs/%E6%95%99%E7%A8%8B/share-ledger) 与 [接入 AI 客户端](https://trans.dhr2333.cn/docs/%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/connect-ai-client)。
 
-![移动端](https://daihaorui.oss-cn-hangzhou.aliyuncs.com/djangoblog/20260929133904086.jpg)
-
 > **托管也意味着数据放在平台上**：完整的数据流与设计取舍见 [数据流隐私上的设计](https://trans.dhr2333.cn/docs/%E8%A7%A3%E9%87%8A/privacy)；若希望数据完全留在自己的机器上，可参考 [自托管](https://trans.dhr2333.cn/docs/developer/self-host)。
 
 ## 您将完成什么
@@ -55,6 +53,8 @@ published_url:
 | **基于模板创建** | 刚开始用 Beancount、想用标准结构      | 平台按标准模板建库，包含目录结构与账户体系，开箱即用                 |
 | **空仓库创建**  | **已有账本的用户**（页面标注为「推荐迁移用户」） | 建一个空仓库，等您把现有账本推上来                          |
 | **关联已有远程** | 账本已经在自己的 Git 远程仓库上         | 关联您现有的仓库；平台生成的密钥用于**拉取**账本，推送仍使用您自己的 Git 凭据（如需平台「提交到账本」写回，须给该公钥写权限） |
+
+![](https://daihaorui.oss-cn-hangzhou.aliyuncs.com/djangoblog/20261017153353580.png)
 
 ### 自带账本的用户：改造这三处即可
 
@@ -125,6 +125,8 @@ git push origin main
 1. 回到 **「个人设置 → Git 同步」**，点击 **「提交到账本」**；
 2. 在弹窗中确认将写入的文件与条数（按交易日期归入 `{年}/{月}.bean`），点 **「提交并推送」**；
 3. 本地执行 `git pull` 即可取回。
+
+![](https://daihaorui.oss-cn-hangzhou.aliyuncs.com/djangoblog/20261017153401400.png)
 
 提交后 `trans/` 中的对应条目会被清空，且无法撤销；请确保条目已在审核阶段处理妥当。
 
