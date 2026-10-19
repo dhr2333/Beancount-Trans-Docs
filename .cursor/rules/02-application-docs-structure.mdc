@@ -1,354 +1,276 @@
 ---
 globs: docs/**/*.md,docs-dev/**/*.md
-description: 应用层 - 文档结构规范（Diátaxis）
+description: 应用层 - 文档结构、Frontmatter 与链接规范
 ---
 
-# 应用层：文档结构规范
+# 应用层：文档结构与元数据
 
-本仓库用户文档遵循 [Diátaxis](https://diataxis.fr/) 框架：按读者需求把内容分成四类，**不要混用**（例如不要在「教程」里塞大段 API 表格，也不要在「参考」里写教学故事）。
+本文件适用于 `docs/`（用户文档）与 `docs-dev/`（开发者文档），规定**放在哪里、如何组织、元数据怎么写**。
 
-## Diátaxis 四象限
+- Markdown 语法与格式元素的使用边界见 [01-foundation-markdown.mdc](mdc:.cursor/rules/01-foundation-markdown.mdc)。
+- 文风、术语、示例数据与发布检查见 [04-application-copy-style.mdc](mdc:.cursor/rules/04-application-copy-style.mdc)。
 
-| 类型 | 英文 | 读者问题 | 写作取向 | 典型内容 |
-|------|------|----------|----------|----------|
-| **教程** | Tutorial | 「跟着学，我能否顺利跑通？」 | 学习路径、固定步骤、可复现、由浅入深 | 快速入门、端到端演练 |
-| **操作指南** | How-to guide | 「我要完成某件事，怎么做？」 | 面向任务、步骤清单、可跳读 | 导出账单、配置映射、排错流程 |
-| **解释** | Explanation | 「为什么会这样？设计权衡是什么？」 | 背景、概念、取舍、与其他系统的关系 | 核心概念、架构思路、分类与标签 |
-| **参考** | Reference | 「这个字段/命令的精确定义是什么？」 | 机械、完整、结构一致、便于检索 | 配置项表、CLI、错误码、默认值 |
+## 适用范围与优先级
 
-### 写作约束（摘要）
+- 新建或大幅改版文档必须满足本文件；`99-归档` 仅需保留既有元数据，不强制补齐。
+- 语法问题以 `01-foundation-markdown.mdc` 为准；结构与元数据问题以本文件为准。
+- 文风与术语问题以 `04-application-copy-style.mdc` 为准。
 
-- **教程**：必须有一条清晰「从头到尾」的路径；每一步可验证——用「您应看到：」给出可观察的结果（界面变化、列表中的一行、报表中的一条记录）；步骤小节标题用「动词 + 对象」，不写纯导航式标题（如「打开 XX」）；避免罗列所有边界情况。
-- **操作指南**：以**目标**命名（动词+对象）；先给最短路径，再链到解释或参考；同一任务的分支、限制与排错就近放在该任务小节内，低频补充用 `<details>` 收起（写法见基础层「折叠块」）
-- **解释**：允许叙述与类比；避免变成逐步操作手册；需要时链接到操作指南或参考。
-- **参考**：按字母或固定结构排列；**不写**教学性开场白；与实现保持同步。
+## Diátaxis 四象限与目录
 
-### 与开发者文档（`docs-dev`）
+| 目录 | `Diátaxis` | 读者问题 | 写作取向 |
+| :--- | :--- | :--- | :--- |
+| `01-教程` | `Tutorials` | 跟着学能否跑通 | 线性步骤、可复现、每步可验证 |
+| `02-操作指南` | `How-to guides` | 我要完成某件事怎么做 | 目标导向、最短路径、可跳读 |
+| `03-参考` | `Reference` | 字段/命令的精确定义 | 机械、完整、结构固定、无教学开场 |
+| `04-解释` | `Explanation` | 为什么这样设计 | 背景、概念、权衡、可叙述 |
+| `99-归档` | 按原文保留 | 历史内容 | 冻结，不新增 |
 
-`docs-dev` 中的内容同样适用 Diátaxis（多为操作指南 + 参考 + 少量解释）。与普通用户文档分离的是**受众与发布范围**，不是框架本身。
+- `docs-dev/` 同样按四象限写作，但受众为开发者，URL 前缀为 `/docs/developer/`。
+- 禁止混用：教程中不放大段字段表；参考中不写教学故事；操作指南不展开设计哲学。
 
-## Frontmatter 字段规范
+## 目录与文件命名
 
-所有文档文件必须在文件开头包含 YAML Frontmatter，参考现有文档：[docs/02-教程/01-快速入门.md](mdc:docs/02-教程/01-快速入门.md)、[docs/04-操作指南/账单导出方法.md](mdc:docs/04-操作指南/账单导出方法.md)（若存在）、[docs/05-归档/01-核心概念.md](mdc:docs/05-归档/01-核心概念.md)。
+- 一级目录使用两位数字前缀 + 中文类型名：`01-教程`、`02-操作指南`、`03-参考`、`04-解释`、`99-归档`。
+- 文件名格式为 `NN-描述性名称.md`；同一目录内编号唯一，按阅读顺序递增。
+- 允许中文与拉丁词之间保留空格，如 `04-Copilot 快速上手.md`、`04-账户 vs 标签.md`。
+- 禁止使用 `_` 分隔、`.markdown` 扩展名，以及 `/:*?"<>|` 等字符。
+- `99-归档` 保留历史文件名与编号，不重命名、不新增；历史博客式文件保留 `YYYY-MM-DD-标题.md`。
+- 目录层级建议不超过 3 层；`docs-dev/` 保持扁平，新增子目录需按 Diátaxis 类型命名。
 
-### Diátaxis 分类（推荐）
-
-在 Frontmatter 中增加 **`diataxis`**，便于人类与自动化工具识别文档类型（取值须为下列之一）：
-
-- `tutorial`：教程
-- `how-to`：操作指南
-- `explanation`：解释
-- `reference`：参考
-
-新建或大幅改版文档时应补齐；存量文档可在修改时逐步补上。
-
-### 必需字段
-
-```yaml
----
-tags: []                    # 标签列表，通常为空数组
-title: 文档标题              # 文档显示标题（中文）
-slug: document-slug         # URL 路径标识符（英文，使用连字符）
-type: Write                 # 文档类型，固定为 "Write"
-date: 2025-08-21            # 创建日期（YYYY-MM-DD 格式）
-created_time: 2025-08-21 13:10:02  # 创建时间（YYYY-MM-DD HH:mm:ss）
-modify_time: 2025-11-14 16:14:00    # 修改时间（YYYY-MM-DD HH:mm:ss）
-authors: dhr2333            # 作者标识符
-doc_status: Published       # 文档状态：Published（已发布）或 Draft（草稿）
-published:                  # 发布渠道列表
-  - beancount-trans-docs
-published_time: 2025-11-14T14:59:00  # 发布时间（ISO 8601 格式）
----
+```text
+docs/
+├── 01-教程/
+│   └── 01-快速入门.md
+├── 02-操作指南/
+│   └── 01-导出账单.md
+├── 03-参考/
+│   └── 01-术语.md
+├── 04-解释/
+│   └── 01-核心定位与理念.md
+└── 99-归档/
 ```
 
-另可增加（推荐，见上文「Diátaxis 分类」）：
+## Frontmatter 规范
 
-```yaml
-diataxis: how-to            # tutorial | how-to | explanation | reference
-```
+所有文档必须在文件开头包含 YAML Frontmatter。字段顺序固定为下列顺序，不得随意调换。
 
-### 字段说明
-
-- **diataxis**：文档在 Diátaxis 中的类型；新建或改版时**应**填写，便于归类与侧栏排序
-- **tags**：文档标签，通常为空数组 `[]`，如需添加标签使用数组格式 `['tag1', 'tag2']`
-- **title**：文档标题，使用中文，清晰描述文档内容
-- **slug**：URL 路径标识符，使用英文小写字母和连字符，如 `quick-start`、`core-concepts`
-- **type**：固定为 `Write`，表示这是一篇文档
-- **date**：文档创建日期，格式为 `YYYY-MM-DD`
-- **created_time**：创建时间，格式为 `YYYY-MM-DD HH:mm:ss`
-- **modify_time**：最后修改时间，格式为 `YYYY-MM-DD HH:mm:ss`
-- **authors**：作者标识符，参考 `blog/authors.yml`
-- **doc_status**：文档状态，`Published` 表示已发布，`Draft` 表示草稿
-- **published**：发布渠道列表，通常包含 `beancount-trans-docs`
-- **published_time**：发布时间，ISO 8601 格式，如 `2025-11-14T14:59:00`
-
-### Frontmatter 示例
+### 用户文档（`docs/`）
 
 ```yaml
 ---
 tags: []
-title: 核心概念
-slug: core-concepts
+title: 文档标题
+slug: document-slug
 type: Write
-diataxis: explanation
-date: 2025-09-08
-created_time: 2025-09-08 11:14:14
-modify_time: 2025-11-14 14:18:35
+Diátaxis: How-to guides
+date: 2026-10-17
+created_time: 2026-10-17T10:00:00
+modify_time: 2026-10-17T10:00:00
 authors: dhr2333
-doc_status: Published
-published:
-  - beancount-trans-docs
-published_time: 2025-09-12 16:07:00
+status: Published
+channels:
+  - Beancount-Trans-Docs
+published_time: 2026-10-17T10:00:00
+content_type: Article
+domain: 项目文档
+quadrant: 实操教程
+published_url:
+  - https://trans.dhr2333.cn/docs/%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/document-slug
 ---
 ```
 
-## 文件命名规范
+### 开发者文档（`docs-dev/`）
 
-### 命名规则
-
-- **数字前缀**：使用两位数字前缀表示文档顺序，如 `01-`、`02-`、`03-`
-- **描述性名称**：使用中文描述性名称，清晰表达文档内容
-- **文件扩展名**：统一使用 `.md` 扩展名
-- **命名格式**：`数字前缀-描述性名称.md`
-
-```text
-// ✅ 正确示例
-01-快速入门.md
-04-操作指南/
-  01-账户.md
-  02-映射.md
-03-解释/
-  01-核心概念.md
-
-// ❌ 错误示例
-快速入门.md              # 缺少数字前缀
-01_快速入门.md          # 使用下划线而非连字符
-01-快速入门.markdown    # 使用 .markdown 而非 .md
-```
-
-### 目录结构示例（Diátaxis 对齐）
-
-顶层目录按 **Diátaxis 类型** 划分（名称可微调，但语义应一致）：
-
-```text
-docs/
-├── 02-教程/                 # Tutorial：学习路径、端到端
-│   ├── 01-快速入门.md
-│   └── ...
-├── 03-解释/                 # Explanation：概念、设计、权衡（可从「归档」逐步迁入）
-│   └── ...
-├── 04-操作指南/             # How-to：任务导向、步骤清单
-│   └── ...
-├── 05-参考/                 # Reference：字段表、默认值、错误码
-│   └── ...
-└── 06-归档/                 # 历史或待归类；新内容不应默认写入此处
-```
-
-若仓库里仍是 `05-归档` 且无 `05-参考`，可暂时保留编号；**一旦新增「参考」类目录**，建议将归档顺延为 `06-归档`，避免出现两个 `05-*` 并列。
-
-自托管等**开发者向**内容放在 `docs-dev/`，其中子目录同样建议按类型命名（如 `02-操作指南/`、`05-参考/`）。
-
-## 目录组织规范
-
-### 目录划分原则
-
-- **按 Diátaxis 类型划分**：每个一级目录对应教程 / 操作指南 / 解释 / 参考之一；目录内再按主题分子目录
-- **数字前缀排序**：使用数字前缀控制目录和文件的显示顺序
-- **层级深度**：建议不超过 3 层目录嵌套
-- **避免混放**：不要把「解释」长文塞进「操作指南」目录，除非该文以操作任务为主（可拆成两篇并互链）
-
-### 目录命名规范
-
-- **数字前缀**：目录名使用数字前缀，如 `02-教程`、`04-操作指南`
-- **中文命名**：使用清晰的中文名称描述目录内容
-- **目录结构**：保持目录结构扁平，避免过深嵌套
-
-```text
-// ✅ 推荐结构（Diátaxis）
-docs/
-├── 02-教程/
-│   └── 01-快速入门.md
-├── 04-操作指南/
-│   └── 01-账单导出方法.md
-└── 03-解释/
-    └── 01-核心概念.md
-
-// ❌ 不推荐：过深嵌套
-docs/
-└── 04-操作指南/
-    └── 01-账单/
-        └── 01-导出/
-            └── 01-方法.md
-```
-
-## 文档层级和导航结构
-
-### 侧边栏配置
-
-文档的导航结构由 `sidebars.ts` 自动生成，使用 `autogenerated` 模式：
-
-```typescript
-const sidebars: SidebarsConfig = {
-  tutorialSidebar: [{type: 'autogenerated', dirName: '.'}],
-};
-```
-
-参考：[sidebars.ts](mdc:sidebars.ts)
-
-### 文档层级建议
-
-- **第一级**：Diátaxis 类型（教程 / 操作指南 / 解释 / 参考）
-- **第二级**：主题域（如「账单」「映射」「部署」）
-- **第三级**：单篇文档或子主题
-
-### 文档组织原则
-
-1. **先分类型，再分主题**：读者先选「我要学 / 我要做 / 我要懂 / 我要查」之一
-2. **交叉链接而非合并**：教程结尾链到操作指南；操作指南链到解释与参考；避免单篇「全能文」
-3. **循序渐进**：教程内保持线性；操作指南内步骤可独立跳转
-4. **易于查找**：参考类文档标题与表格列名稳定、可排序
-
-## 文档内容结构
-
-### 按 Diátaxis 类型的结构要点
-
-| 类型 | 开篇 | 正文 | 结尾 |
-|------|------|------|------|
-| 教程 | 你将完成什么、前提环境 | 编号步骤，每步可验证 | 下一步学什么 / 常见卡点 |
-| 操作指南 | 适用场景与前提 | 最短步骤；分支用「若…则…」 | 相关解释、参考链接 |
-| 解释 | 要回答的「为什么」 | 概念、历史、权衡、边界 | 链到操作指南或参考 |
-| 参考 | 无叙事开场 | 表格、列表、固定小节 | 版本或兼容性注记 |
-
-### 标准文档结构（通用骨架）
-
-参考：[docs/02-教程/01-快速入门.md](mdc:docs/02-教程/01-快速入门.md)
-
-```markdown
----
-# Frontmatter（含 diataxis）
----
-
-# 文档标题（由 Docusaurus 自动生成，Markdown 中从 ## 开始）
-
-## 一、（教程：目标与前提）/（操作指南：要完成的事）/（解释：问题陈述）/（参考：范围说明）
-
-## 二、主体（步骤 / 论证 / 表格）
-
-## 三、总结、相关链接或「参见」
-```
-
-### 章节组织建议
-
-- **教程、操作指南、解释**：可使用「一、二、三」作为一级标题，子节用 `###`
-- **参考**：优先用固定小标题（如「字段说明」「默认值」「示例」），少用叙事性章节名
-- **小节**：使用 `###` 作为三级标题
-
-```markdown
-## 一、总览：它是如何工作的？   <!-- explanation 示例 -->
-
-### 1. 账本 (Ledger)
-
-#### 账本的作用
-
-这是详细说明。
-```
-
-## 文档状态管理
-
-### 文档状态字段
-
-- **Published**：已发布的文档，会在网站上显示
-- **Draft**：草稿文档，不会在网站上显示
+与用户文档相同，但**不写 `published_url`**：
 
 ```yaml
 ---
-doc_status: Published  # 或 Draft
+tags: []
+title: 文档标题
+slug: document-slug
+type: Write
+Diátaxis: How-to guides
+date: 2026-10-17
+created_time: 2026-10-17T10:00:00
+modify_time: 2026-10-17T10:00:00
+authors: dhr2333
+status: Published
+channels:
+  - Beancount-Trans-Docs
+published_time: 2026-10-17T10:00:00
+content_type: Article
+domain: 项目文档
+quadrant: 实操教程
 ---
 ```
 
-### 发布流程
+### 字段规则
 
-1. 创建文档时设置 `doc_status: Draft`
-2. 完成编写和审核后，修改为 `doc_status: Published`
-3. 更新 `modify_time` 和 `published_time`
+- `title`：中文，简洁描述文档内容，与侧边栏显示一致。
+- `slug`：小写英文 + 连字符；全站唯一（含 `docs/` 与 `docs-dev/`）；发布后保持稳定。
+- `type`：固定 `Write`。
+- `Diátaxis`：严格取 `Tutorials` / `How-to guides` / `Reference` / `Explanation`，且与所在目录一致。
+- `date`：`YYYY-MM-DD`。
+- `created_time` / `modify_time` / `published_time`：`YYYY-MM-DDTHH:mm:ss`，24 小时制，不带时区。
+- `created_time`：创建后不再修改。
+- `modify_time`：每次改动正文必须更新。
+- `published_time`：首次发布时设置。
+- `authors`：必须存在于 `blog/authors.yml`。
+- `status`：`Idea` / `Draft` / `Published` / `Archived`。
+  - `Idea`：只有想法或提纲，正文可为空。
+  - `Draft`：写作中，不应发布到站点。
+  - `Published`：已发布。
+  - `Archived`：仅用于 `99-归档`。
+- `channels`：固定 `Beancount-Trans-Docs`。
+- `content_type`：固定 `Article`。
+- `domain`：固定 `项目文档`。
+- `quadrant`：`实操教程` / `核心理念` / `案例故事` / `观点评论`，可写字符串或数组。
+- `published_url`：仅 `docs/` 下 `status: Published` 的文档必填；`docs-dev/` 与草稿省略；`Archived` 文档保留已有值，不强制补。
+- `tags`：文档中固定为空数组 `[]`；标签体系仅用于 `blog/`。
 
-## 文档维护规范
+### 可选字段
 
-### 更新文档时
+可选字段放在 `quadrant` 之后、`published_url` 之前：
 
-- **更新 modify_time**：每次修改文档时更新 `modify_time` 字段
-- **保持 created_time**：`created_time` 字段不应修改，保持原始创建时间
-- **更新 published_time**：如果文档状态从 Draft 变为 Published，更新 `published_time`
+- `summary`：一句话摘要，解释类与操作指南推荐填写。
+- `source`：写作来源，字符串或数组。
+- `aliases`：Obsidian 别名，字符串或数组。
+- `parent`：Obsidian 关系，仅用于本地笔记管理，不影响站点。
 
-### 文档版本控制
-
-- 使用 Git 管理文档版本
-- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范
-- 重要更新应在文档中记录变更历史
-
-## 文档链接规范
-
-### 内部链接
-
-**重要说明**：由于文档会在 Obsidian 中编写，然后推送到远程仓库由 Docusaurus 构建，**必须使用完整 URL 或 Docusaurus 路由路径**，不要使用相对路径 `.md` 文件链接。
-
-#### 推荐方式：完整 URL（适用于 Obsidian 和 Docusaurus）
-
-使用完整 URL 可以确保链接在 Obsidian 和 Docusaurus 中都能正常工作：
-
-```markdown
-// ✅ 推荐：完整 URL（内部文档链接）
-详细说明请参阅 [账户管理文档](https://trans.dhr2333.cn/docs/account)（URL 以各文档 `slug` 为准）
-更多信息请查看 [核心概念](https://trans.dhr2333.cn/docs/core-concepts)
-
-// ✅ 推荐：完整 URL（外部链接）
-访问 [Beancount-Trans 控制台](https://trans.dhr2333.cn/login)
+```yaml
+summary: 解析产出候选，审核确认为事实
+source:
+  - 为什么解析与审核要分离
+aliases:
+  - 为什么要审核
 ```
 
-#### 备选方式：Docusaurus 路由路径（仅适用于 Docusaurus）
+禁止新增未在本文件登记的 Frontmatter 字段；需要新增时先修改本规范。
 
-如果只在 Docusaurus 中使用，可以使用基于 slug 的绝对路径：
+## URL、slug 与链接
+
+### 路由规则
+
+- 用户文档：`https://trans.dhr2333.cn/docs/<目录 URL 编码>/<slug>`
+- 开发者文档：`https://trans.dhr2333.cn/docs/developer/<slug>`
+
+常见目录的 URL 编码：
+
+| 目录 | URL 编码 |
+| :--- | :--- |
+| `01-教程` | `%E6%95%99%E7%A8%8B` |
+| `02-操作指南` | `%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97` |
+| `03-参考` | `%E5%8F%82%E8%80%83` |
+| `04-解释` | `%E8%A7%A3%E9%87%8A` |
+| `99-归档` | `%E5%BD%92%E6%A1%A3` |
+
+### 链接写法
+
+- 站内跨文档链接统一使用完整 URL；禁止使用相对 `.md` 链接指向已发布文档。
+- 中文目录在完整 URL 中必须使用百分号编码；不得手写未编码的中文路径。
+- 修改 `slug` 视为破坏性变更：必须在同一提交内同步修改 `published_url` 与所有入链。
+- 锚点链接优先指向文档而非具体小节；确需锚点时从构建后页面复制。
+- 链接文本必须描述目标，禁止「点击这里」「此文章」。
 
 ```markdown
-// ✅ 备选：Docusaurus 路由路径（基于 baseUrl 和 slug）
-详细说明请参阅 [账户管理文档](/docs/account)
-更多信息请查看 [核心概念](/docs/core-concepts)
+<!-- 正确 -->
+更多信息见 [账本写入](https://trans.dhr2333.cn/docs/%E5%8F%82%E8%80%83/ledger-files-and-writes)。
+
+<!-- 错误：相对 .md 链接 -->
+更多信息见 [账本写入](../03-参考/02-账本写入.md)。
+
+<!-- 错误：中文未编码 -->
+更多信息见 [账本写入](https://trans.dhr2333.cn/docs/参考/ledger-files-and-writes)。
 ```
 
-**注意**：这种方式在 Obsidian 中可能无法正确跳转，因为 Obsidian 无法解析 Docusaurus 的路由。
+## 各类型内容骨架
 
-#### 不推荐：相对路径 `.md` 文件链接
-
-**不要使用**相对路径链接 `.md` 文件，因为：
-
-1. Docusaurus 使用 `slug` 字段生成 URL，而不是文件名
-2. 相对路径在构建时可能无法正确解析
-3. 文件重命名或移动会导致链接失效
+### 教程（`Tutorials`）
 
 ```markdown
-// ❌ 不推荐：相对路径 .md 文件链接
-更多信息请查看 [核心概念](./01-核心概念.md)  // 在 Docusaurus 中可能无法工作
+## 你将完成什么
+
+一句话说明目标与前提环境。
+
+## 步骤一：动词 + 对象
+
+1. 操作。
+2. 操作。
+
+您应看到：界面变化或列表中的一行。
+
+## 下一步
+
+- 链到操作指南或解释。
 ```
 
-### 链接最佳实践
+### 操作指南（`How-to guides`）
 
-- **统一使用完整 URL**：为了兼容 Obsidian 和 Docusaurus，推荐统一使用完整 URL
-- **基于 slug 构建 URL**：URL 路径基于文档的 `slug` 字段，而不是文件名
-- **描述性链接文本**：使用清晰的描述性文本，避免"点击这里"
-- **链接到相关文档**：在文档末尾添加"相关文档"或"下一步"部分；**跨 Diátaxis 类型**时优先链到对应类型（例如教程 → 操作指南，而非直接跳到参考大表）
-- **检查链接有效性**：确保所有链接指向有效的文档或页面
+```markdown
+## 适用场景与前提
 
-### URL 路径规则
+说明什么时候用、开始前需要什么。
 
-文档的 URL 路径由以下规则确定：
+## 完成步骤
 
-1. **基础路径**：`baseUrl`（配置为 `/docs/`）
-2. **文档路径**：基于文档的 `slug` 字段
-3. **完整 URL**：`https://trans.dhr2333.cn` + `baseUrl` + `slug`
+1. 最短路径步骤。
+2. 分支用「若…则…」。
 
-示例：
+## 相关阅读
 
-- 文档 `slug: quick-start` → URL: `https://trans.dhr2333.cn/docs/quick-start`
-- 文档 `slug: account`（在 `04-操作指南/` 等目录下时，URL 仍由 `slug` 决定，不一定含目录名）→ 以各文件 `slug` 为准
+- 解释：为什么这样设计。
+- 参考：字段与默认值。
+```
 
-参考现有文档的实际链接使用：[docs/02-教程/01-快速入门.md](mdc:docs/02-教程/01-快速入门.md) 与站内其他已发布文档。
+### 参考（`Reference`）
+
+```markdown
+## 字段说明
+
+| 字段 | 必填级别 | 默认值 | 说明 |
+| :--- | :--- | :--- | :--- |
+
+## 限制
+
+## 示例
+```
+
+### 解释（`Explanation`）
+
+```markdown
+## 问题
+
+我们要回答的「为什么」。
+
+## 背景与权衡
+
+概念、历史、取舍、边界。
+
+## 结论
+
+一段可引用的结论。
+
+## 相关操作
+
+- 链到操作指南或参考。
+```
+
+## 导航与归档
+
+- 侧边栏顺序由数字前缀决定，不手写 `sidebars.ts` 条目。
+- `_category_.json` 仅用于目录标签与隐藏；`99-归档` 保持 `label: Legacy` 与隐藏样式。
+- 活跃文档不得链接到 `99-归档`；确需历史背景时，先把内容迁入活跃象限再链接。
+- 归档流程：
+  1. 移入 `99-归档`。
+  2. 设置 `status: Archived`。
+  3. 更新所有入链，指向活跃替代文档。
+  4. 保留 `published_url` 作为历史记录。
+  5. 不再更新正文。
+
+## 维护流程
+
+- 状态流转：`Idea` → `Draft` → `Published` → `Archived`；`Idea` / `Draft` 不应发布到站点。
+- 每次修改更新 `modify_time`；首次发布更新 `published_time`；归档不改 `created_time`。
+- 提交信息遵循 Conventional Commits，文档改动使用 `docs: ...`。
+- 合并前必须通过 `npm run build`（站点配置 `onBrokenLinks: 'throw'`）。
